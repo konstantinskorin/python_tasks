@@ -61,6 +61,8 @@ def write_log():
                 parametrs["disk_io_counters"].busy_time),
             'NETWORK_BYTES' : str(parametrs["net_io_counters"].bytes_sent)+"/"+str(
                 parametrs["net_io_counters"].bytes_recv)}
+        my_file = open('log.json', 'a')
+        my_file.close()
         my_file = open('log.json', 'r')
         content = my_file.read()
         my_file.close()
