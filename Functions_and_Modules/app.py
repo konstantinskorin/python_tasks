@@ -2,15 +2,8 @@
 import psutil
 import datetime
 import time
-import configparser
-
-
-def settingsfile():
-    config = configparser.ConfigParser()
-    config.read('config.cfg')
-    interval = config.get("interval", "interval")
-    result = {"interval": interval}
-    return result
+import settings
+import json
 
 
 def data():
@@ -52,73 +45,97 @@ def data():
 
 def write_log():
     parametrs = data()
-    my_file = open('log.txt', 'a')
-    my_file.writelines(
-        "{0}{1}\n".format(
-            "Текущее время: ", str(parametrs["time"])
-            )
-    )
-    my_file.writelines("{0}{1}\n".format(
-        "Kоличество логических процессоров в системе: ",
-        str(parametrs["cpu_count"])
-            )
-    )
-    my_file.writelines(
-        "{0}{1}\n".format(
-            "Уровень нагрузки процессора : ", str(parametrs["cpu_percent"])
-            )
-    )
-    my_file.writelines(
-        "{0}{1}\n".format(
-            "Время работы центрального процессора: ",
-            str(parametrs["cpu_times"].user)
-            )
-    )
-    my_file.writelines(
-        "{0}{1}\n".format(
-            "Средняя загрузка системы: ",
-            str(parametrs["getloadavg"])
-            )
-    )
-    my_file.writelines(
-        "{0}{1}\n".format(
-            "Использование системной памяти в байтах общая/используемая: ",
-            str(parametrs["virtual_memory"].total)+"/"+str(parametrs["virtual_memory"].used)
-            )
-    )
-    my_file.writelines(
-        "{0}{1}\n".format(
-            "Использование swap памяти в байтах общая/используемая: ",
-            str(parametrs["swap_memory"].total)+"/"+str(parametrs["swap_memory"].used)
-            )
-    )
-    my_file.writelines(
-        "{0}{1}\n".format(
-            "Список всех смонтированных разделов диска: ",
-            str(parametrs["disk_partitions"])
-            )
-    )
-    my_file.writelines(
-        "{0}{1}\n".format(
-            "Данных о вводе/выводе и время, потраченное на фактические операции ввода-вывода: ",str(
-                    parametrs["disk_io_counters"].read_count)+"/"+str(
-                    parametrs["disk_io_counters"].write_count)+" time(ms):"+str(
-                    parametrs["disk_io_counters"].busy_time)
-            )
-    )
-    my_file.writelines(
-        "{0}{1}\n".format(
-            "Данные сетевого ввода/вывода в байтах: ", str(
-                    parametrs["net_io_counters"].bytes_sent)+"/"+str(
-                    parametrs["net_io_counters"].bytes_recv)+"\n"
-            )
-    )
+    if settings.output == 'json':
+        my_dict = {'TIME': str(parametrs["time"]),
+            'CPU_COUNT' : str(parametrs["cpu_count"]),
+            'CPU_LOAD' : str(parametrs["cpu_percent"]),
+            'CPU_TIME' : str(parametrs["cpu_times"].user),
+            'LOAD_AVERAGE' : str(parametrs["getloadavg"]),
+            'MEMORY_USAGE_BYTES' : str(parametrs["virtual_memory"].total)+"/"+str(
+                parametrs["virtual_memory"].used),
+            'SWAP_USAGE_BYTES' : str(parametrs["swap_memory"].total)+"/"+str(
+                parametrs["swap_memory"].used),
+            'DISK_PARTITION' : str(parametrs["disk_partitions"]),
+            'I/O' : str(parametrs["disk_io_counters"].read_count)+"/"+str(
+                parametrs["disk_io_counters"].write_count)+" time(ms):"+str(
+                parametrs["disk_io_counters"].busy_time),
+            'NETWORK_BYTES' : str(parametrs["net_io_counters"].bytes_sent)+"/"+str(
+                parametrs["net_io_counters"].bytes_recv)}
+        my_file = open('log.json', 'r')
+        content = my_file.read()
+        my_file.close()
+        load = json.loads(content) if content else []
+        load.append(my_dict)
+        dump = json.dumps(load)
+        my_file = open('log.json', 'w')
+        my_file.write(dump) 
+    else:
+        my_file = open('log.txt', 'a')
+        my_file.writelines(
+            "{0}{1}\n".format(
+                "Текущее время: ", str(parametrs["time"])
+                )
+        )
+        my_file.writelines("{0}{1}\n".format(
+            "Kоличество логических процессоров в системе: ",
+            str(parametrs["cpu_count"])
+                )
+        )
+        my_file.writelines(
+            "{0}{1}\n".format(
+                "Уровень нагрузки процессора : ", str(parametrs["cpu_percent"])
+                )
+        ) 
+        my_file.writelines(
+            "{0}{1}\n".format(
+                "Время работы центрального процессора: ",
+                str(parametrs["cpu_times"].user)
+                )
+        )
+        my_file.writelines(
+            "{0}{1}\n".format(
+                "Средняя загрузка системы: ",
+                str(parametrs["getloadavg"])
+                )
+        )
+        my_file.writelines(
+            "{0}{1}\n".format(
+                "Использование системной памяти в байтах общая/используемая: ",
+                str(parametrs["virtual_memory"].total)+"/"+str(parametrs["virtual_memory"].used)
+                )
+        )
+        my_file.writelines(
+            "{0}{1}\n".format(
+                "Использование swap памяти в байтах общая/используемая: ",
+                str(parametrs["swap_memory"].total)+"/"+str(parametrs["swap_memory"].used)
+                )
+        )
+        my_file.writelines(
+            "{0}{1}\n".format(
+                "Список всех смонтированных разделов диска: ",
+                str(parametrs["disk_partitions"])
+                )
+        )
+        my_file.writelines(
+            "{0}{1}\n".format(
+                "Данных о вводе/выводе и время, потраченное на фактические операции ввода-вывода: ",str(
+                        parametrs["disk_io_counters"].read_count)+"/"+str(
+                        parametrs["disk_io_counters"].write_count)+" time(ms):"+str(
+                        parametrs["disk_io_counters"].busy_time)
+                )
+        )
+        my_file.writelines(
+            "{0}{1}\n".format(
+                "Данные сетевого ввода/вывода в байтах: ", str(
+                        parametrs["net_io_counters"].bytes_sent)+"/"+str(
+                        parametrs["net_io_counters"].bytes_recv)+"\n"
+                )
+        )
     my_file.close()
 
 
 def main():
     while True:
         write_log()
-        time.sleep(int(settingsfile()["interval"]))
-        settingsfile()
+        time.sleep(settings.interval)
 main()
