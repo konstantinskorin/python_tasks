@@ -75,7 +75,6 @@ def main():
     while True:
         write_log()
         time.sleep(settings.interval)
-
         
 main()
 
