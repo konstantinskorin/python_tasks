@@ -68,7 +68,7 @@ def write_log():
         my_file.close()
         load = json.loads(content) if content else []
         load.append(my_dict)
-        dump = json.dumps(load)
+        dump = json.dumps(load, indent=4, sort_keys=True)
         my_file = open('log.json', 'w')
         my_file.write(dump) 
     else:
