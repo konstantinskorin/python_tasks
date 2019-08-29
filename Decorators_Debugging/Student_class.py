@@ -67,7 +67,7 @@ class Student(object):
 
     def setsurname(self, value):
         if isinstance(value, str):
-            if len(value) <= 25:
+            if len(value) <= 50:
                 self.__surname = value
             else:
                 raise ValueError("Surname input error")
@@ -80,7 +80,7 @@ class Student(object):
             valid = False
         else:
             try:
-                datetime.strptime(value, '%Y-%m-%d')
+                datetime.strptime(value, '%d.%m.%Y')
             except:
                 valid = False
         if valid:
@@ -146,9 +146,9 @@ class Student(object):
 
 
 student = Student(
-    "Konstatin", "Skorin", "1986-09-30", "Male", 4, "devops", 3)
+    "Konstatin", "Skorin", "30.09.1986", "Male", 4, "devops", 3)
 
 
 print (student)
-student = Student.defSt("Ivan:Petrov:1996-08-01:M:8:Java:2")
+student = Student.defSt("Ivan:Petrov:01.08.1991:M:8:Java:2")
 print (student)
