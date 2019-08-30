@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
-import os
+#import os
 from datetime import datetime
 
 
 class Student(object):
     def __init__(
         self, name, surname, birthdate, gender,
-            grade, speciality, coursenumber):
+            assessment, speciality, coursenumber):
 
         self.setname(name)
         self.setsurname(surname)
         self.setbirthdate(birthdate)
         self.setgender(gender)
-        self.grade = grade
+        self.assessment = assessment
         self.speciality = speciality
         self.coursenumber = coursenumber
 
@@ -33,12 +33,12 @@ class Student(object):
         return self.__gender
 
     @property
-    def grade(self):
-        return self.__grade
+    def assessment(self):
+        return self.__assessment
 
-    @grade.setter
-    def grade(self, value):
-        self.setgrade(value)
+    @assessment.setter
+    def assessment(self, value):
+        self.setassessment(value)
 
     @property
     def speciality(self):
@@ -94,10 +94,10 @@ class Student(object):
         else:
             raise ValueError("Gender input error")
 
-    def setgrade(self, value):
+    def setassessment(self, value):
         if isinstance(value, int):
             if value in range(1, 10):
-                self.__grade = value
+                self.__assessment = value
             else:
                 raise ValueError("Grade input error")
         else:
@@ -114,7 +114,7 @@ class Student(object):
 
     def setcoursenumber(self, value):
         if isinstance(value, int):
-            if value in range(1, 5):
+            if value in range(1, 6):
                 self.__coursenumber = value
             else:
                 raise ValueError("Course number input error")
@@ -124,11 +124,11 @@ class Student(object):
     def __str__(self):
         res = (
             "Student:" + '   |  ' + "Birth Date:" + ' | ' + "Gender:" +
-            ' | ' + "Grade:" + ' | ' + "Specialty:" + '   |   ' +
+            ' | ' + "Assessment:" + ' | ' + "Specialty:" + '   |   ' +
             "Course number:\n")
         res += self.name + ' ' + self.surname + ' | ' + self.birthdate + ' | '
         res += self.gender + '  |  ' + str(
-            self.grade) + '   |   ' + self.speciality + ' | ' + str(
+            self.assessment) + '   |   ' + self.speciality + ' | ' + str(
                 self.coursenumber)
         return res
 
@@ -146,7 +146,7 @@ class Student(object):
 
 
 student = Student(
-    "Konstatin", "Skorin", "30.09.1986", "Male", 4, "devops", 3)
+    "Konstatin", "Skorin", "30.09.1986", "Male", 4, "Devops", 5)
 
 
 print (student)
