@@ -142,11 +142,8 @@ class Student(object):
             args[0], args[1], args[2], args[3], args[4], args[5], args[6])
 
 
-student = Student(
-   "Konstantin" , "Skorin", "30.09.1986", "Male", 4, "Devops", 5)
+st1 = Student("Konstantin" , "Skorin", "30.09.1986", "Male", 4, "Devops", 5)
+print (st1)
 
-
-
-print (student)
-student = Student.defSt("Ivan:Petrov:01.08.1991:M:8:Java:2")
-print (student)
+st2 = Student.defSt("Ivan:Petrov:01.08.1991:M:8:Java:2")
+print (st2)
