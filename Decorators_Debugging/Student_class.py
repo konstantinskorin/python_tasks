@@ -14,7 +14,8 @@ class Student(object):
         self.assessment = assessment
         self.speciality = speciality
         self.coursenumber = coursenumber
-
+    
+    #скроем атрибуты и зададим доступы ro и rw, используя свойства
     @property
     def name(self):
         return self.__name
@@ -55,6 +56,11 @@ class Student(object):
     def coursenumber(self, value):
         self.setcoursenumber(value)
 
+    '''
+    установим параметры и необходимые проверки согласно заданию;
+    isinstance - проверяем является ли указанный объект экземпляром указанного класса;
+    raise - возбуждает указанное исключение
+    '''
     def setname(self, value):
         if isinstance(value, str):
             if len(value) <= 25:
@@ -131,7 +137,7 @@ class Student(object):
 
     @staticmethod
     def defSt(string):
-        args = string.split(':')
+        args = string.split(':') # разбивает строку на части, используя разделитель ':'
         if args[3] == 'M':
             args[3] = 'Male'
         else:
