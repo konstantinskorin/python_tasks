@@ -60,5 +60,5 @@ rfile.close()
 
 wfile = open("ext_students.dat ", "a")
 for student in student_list:
-    wfile.write(str(student) + '\n')
+    wfile.write(str(student))
 wfile.close()
