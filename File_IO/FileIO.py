@@ -16,7 +16,7 @@ class ExtenderStudent(Student):
         self.__password = password
 
     @staticmethod
-    def makeExSt(args):
+    def defExSt(args):
         args = args.split(':::')
         if args[3] == 'M':
             args[3] = 'Male'
@@ -24,9 +24,12 @@ class ExtenderStudent(Student):
             args[3] = 'Female'
         args[4] = int(args[4])
         args[6] = int(args[6])
+        # зададим логин, взяв первую букву первого аргумента и полностью второй аргумент, все переведем в нижней регистр
         login = ('' + args[0][0] + args[1]).lower()
-        allchar = string.ascii_letters + string.digits
-        password = ''.join(choice(allchar) for x in range(randint(6, 9)))
+        # переменная для пароля состоящая из букв верхнего и нижнего регистра и цифр
+        pwd_date = string.ascii_letters + string.digits
+        # зададим пароль, задав ограничение от 6 до 9 символов
+        password = ''.join(choice(pwd_date) for x in range(randint(6, 9)))
         return ExtenderStudent(args[0], args[1], args[2], args[3], args[4],
                                args[5], args[6], login, password)
 
@@ -40,22 +43,22 @@ class ExtenderStudent(Student):
 
     def __str__(self):
         res = (
-            '|' + "{} {}" + ':::' + "{}" + ':::' + "{}" +
+            "{} {}" + ':::' + "{}" + ':::' + "{}" +
             ':::' + "{}" + ':::' + "{}" + ':::' +
-            "{}" + ':::' + "{}" + ':::' + "{}" + '|\n').format(
+            "{}" + ':::' + "{}" + ':::' + "{}\n").format(
             self.name, self.surname, self.birthdate,
-            self.gender, str(self.grade), self.speciality, str(self.coursenumber),
-            self.login, self.password)
+            self.gender, str(self.grade), self.speciality, 
+            str(self.coursenumber),self.login, self.password)
         return res
 
 
-file_open = open("students.dat", "r")
+rfile = open("students.dat", "r")
 student_list = []
-for line in file_open.readlines():
-    student_list.append(ExtenderStudent.makeExSt(line))
-file_open.close()
+for line in rfile.readlines():
+    student_list.append(ExtenderStudent.defExSt(line))
+rfile.close()
 
-file_out = open("ext_students.dat ", "a")
+wfile = open("ext_students.dat ", "a")
 for student in student_list:
-    file_out.write(str(student) + '\n')
-file_out.close()
+    wfile.write(str(student) + '\n')
+wfile.close()
