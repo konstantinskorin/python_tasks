@@ -116,38 +116,6 @@ class Matrix(object):
 
         return mulmat
 
-    def __iadd__(self, mat):
-        """ Add a matrix to this matrix.
-        This modifies the current matrix """
-
-        # Calls __add__
-        tempmat = self + mat
-        self.rows = tempmat.rows[:]
-        return self
-
-    def __isub__(self, mat):
-        """ Add a matrix to this matrix.
-        This modifies the current matrix """
-
-        # Calls __sub__
-        tempmat = self - mat
-        self.rows = tempmat.rows[:]     
-        return self
-
-    def __imul__(self, mat):
-        """ Add a matrix to this matrix.
-        This modifies the current matrix """
-
-        # Possibly not a proper operation
-        # since this changes the current matrix
-        # rank as well...
-        
-        # Calls __mul__
-        tempmat = self * mat
-        self.rows = tempmat.rows[:]
-        self.m, self.n = tempmat.getRank()
-        return self
-
     def save(self, filename):
         open(filename, 'w').write(str(self))
         
@@ -231,7 +199,7 @@ class Matrix(object):
         return cls._makeMatrix(rows)
         
 
-class MatrixTests(unittest.TestCase):
+"""class MatrixTests(unittest.TestCase):
 
     def testAdd(self):
         m1 = Matrix.fromList([[1, 2, 3], [4, 5, 6]])
@@ -279,4 +247,4 @@ class MatrixTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
+"""

@@ -165,8 +165,8 @@ class Matrix(object):
         """ Make a random matrix with elements in range (low-high) """
         
         obj = Matrix(m, n, init=False)
-        for x in range(n):
-            obj.rows.append([random.randrange(low, high) for i in range(obj.m)])
+        for x in range(m):
+            obj.rows.append([random.randrange(low, high) for i in range(obj.n)])
 
         return obj
 
