@@ -32,12 +32,11 @@ class Matrix(object):
         rank = str(self.getRank())
         rep="Matrix: \"%s\", rank: \"%s\"" % (s,rank)
         return rep
-    
-    def reset(self):
-        """ Reset the matrix data """
-        self.rows = [[] for x in range(self.m)]
-        
+            
     def is_identity(self):
+        """ Проверка является ли матрица единичной
+        (диагональные элементы которой равны 1) """
+
         if self.m != self.n:
             return False
         for r in range(self.m):
@@ -47,12 +46,17 @@ class Matrix(object):
         return True
 
     def is_square(self):
+        """ Проверка является ли матрица квадратной """
+    
         res = False
         if self.m == self.n:
             res = True
         return res
 
     def is_zero(self):
+        """ Проверка является ли матрица нулевой
+        (все её элементы равны нулю) """
+
         res = True
         for row in self.rows:
             for element in row:
@@ -61,6 +65,9 @@ class Matrix(object):
         return res
 
     def is_diagonal(self):
+        """ Проверка является ли матрица диагональной
+        (все ее элементы, стоящие вне главной диагонали, равны 0) """
+
         if self.m != self.n:
             return False
         for r in range(self.m):
@@ -70,14 +77,14 @@ class Matrix(object):
         return True
                      
     def transpose(self):
-        """ Transpose the matrix. Changes the current matrix """
+        """ Транспонирование матрицы (изменяет текущую матрицу) """
         
         self.m, self.n = self.n, self.m
         self.rows = [list(item) for item in zip(*self.rows)]
 
     def getTranspose(self):
-        """ Return a transpose of the matrix without
-        modifying the matrix itself """
+        """ Возвратить транспонирование матрицы
+        без изменения самой матрицы """
         
         m, n = self.n, self.m
         mat = Matrix(m, n)
@@ -89,14 +96,12 @@ class Matrix(object):
         return (self.m, self.n)
 
     def __eq__(self, mat):
-        """ Test equality """
+        """ Проверка равенства """
 
         return (mat.rows == self.rows)
         
     def __add__(self, mat):
-        """ Add a matrix to this matrix and
-        return the new matrix. Doesn't modify
-        the current matrix """
+        """ Сложение """
         
         if self.getRank() != mat.getRank():
             raise MatrixError("Trying to add matrixes of varying rank!")
@@ -110,9 +115,7 @@ class Matrix(object):
         return ret
 
     def __sub__(self, mat):
-        """ Subtract a matrix from this matrix and
-        return the new matrix. Doesn't modify
-        the current matrix """
+        """ Вычитание """
         
         if self.getRank() != mat.getRank():
             raise MatrixError("Trying to add matrixes of varying rank!")
@@ -126,9 +129,7 @@ class Matrix(object):
         return ret
 
     def __mul__(self, mat):
-        """ Multiple a matrix with this matrix and
-        return the new matrix. Doesn't modify
-        the current matrix """
+        """ Умножение """
         
         matm, matn = mat.getRank()
         
@@ -145,7 +146,8 @@ class Matrix(object):
         return mulmat
 
     def save(self, filename):
-        open(filename, 'w').write(str(self))
+        """ Сохранение в файл """
+        open(filename, 'a').write(str(self))
         
     @classmethod
     def _makeMatrix(cls, rows):
@@ -162,7 +164,7 @@ class Matrix(object):
         
     @classmethod
     def makeRandom(cls, m, n, low=0, high=10):
-        """ Make a random matrix with elements in range (low-high) """
+        """ Создание матрицы со случайными элементами """
         
         obj = Matrix(m, n, init=False)
         for x in range(m):
@@ -172,14 +174,14 @@ class Matrix(object):
 
     @classmethod
     def makeZero(cls, m, n):
-        """ Make a zero-matrix of rank (mxn) """
+        """ Создание нулевой матрицы """
 
         rows = [[0]*n for x in range(m)]
         return cls.fromList(rows)
 
     @classmethod
     def makeId(cls, m):
-        """ Make identity matrix of rank (mxm) """
+        """ Создание единичной матрицы """
 
         rows = [[0]*m for x in range(m)]
         idx = 0
@@ -192,7 +194,7 @@ class Matrix(object):
     
     @classmethod
     def readStdin(cls):
-        """ Read a matrix from standard input """
+        """ Создание матрицы со стандартного ввода """
         
         print ('Enter matrix row by row. Type "q" to quit')
         rows = []
@@ -207,7 +209,7 @@ class Matrix(object):
 
     @classmethod
     def readGrid(cls, fname):
-        """ Read a matrix from a file """
+        """ Чтение матрицы из файла """
 
         rows = []
         for line in open(fname).readlines():
@@ -218,8 +220,7 @@ class Matrix(object):
 
     @classmethod
     def fromList(cls, listoflists):
-        """ Create a matrix by directly passing a list
-        of lists """
+        """ Создание матрицы из списка """
 
         # E.g: Matrix.fromList([[1 2 3], [4,5,6], [7,8,9]])
 
@@ -227,5 +228,9 @@ class Matrix(object):
         return cls._makeMatrix(rows)
 
 class HorizontalVector(Matrix):
-    def __init__(self, m, init=True):
-        super(HorizontalVector, self).__init__(m, 1, init)
+    def __init__(self, m, init = True):
+        super(HorizontalVector, self).__init__(1, m, init)
+
+class VerticalVector(Matrix):
+    def __init__(self, n, init = True):
+        super(VerticalVector, self).__init__(n, 1, init)
