@@ -147,14 +147,14 @@ class Matrix(object):
 
     def save(self, filename):
         """ Сохранение в файл """
-        open(filename, 'a').write(str(self))
+        open(filename, 'w').write(str(self))
         
     @classmethod
     def _makeMatrix(cls, rows):
 
         m = len(rows)
         n = len(rows[0])
-        # Validity check
+
         if any([len(row) != n for row in rows[1:]]):
             raise MatrixError("inconsistent row length")
         mat = Matrix(m,n, init=False)
@@ -222,7 +222,7 @@ class Matrix(object):
     def fromList(cls, listoflists):
         """ Создание матрицы из списка """
 
-        # E.g: Matrix.fromList([[1 2 3], [4,5,6], [7,8,9]])
+        # Пример: Matrix.fromList([[1 2 3], [4,5,6], [7,8,9]])
 
         rows = listoflists[:]
         return cls._makeMatrix(rows)
